@@ -1,0 +1,32 @@
+name: build
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        arch: [ "win-x64", "osx-x64", "linux-x64", "linux-arm64", "linux-arm" ]
+    
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Publish ArispexBlacklistSystemBot
+        run: dotnet publish ArispexBlacklistSystemBot -c Release -o ${{ matrix.arch }} -r ${{ matrix.arch }} --no-self-contained
+
+      - name: Copy appsettings.json
+        run: cp -r ArispexBlacklistSystemBot/appsettings.json ${{ matrix.arch }}/appsettings.json
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ArispexBlacklistSystemBot-${{ matrix.arch }}-release
+          path: ${{ matrix.arch }}
