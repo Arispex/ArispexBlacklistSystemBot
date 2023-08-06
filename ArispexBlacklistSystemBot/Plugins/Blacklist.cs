@@ -122,7 +122,7 @@ public class Blacklist: CqPostPlugin
             
             if (parameters.Length != 2)
             {
-                await actionSession.SendGroupMessageAsync(context.GroupId, new CqMessage("删除云黑 <QQ号>"));
+                await actionSession.SendGroupMessageAsync(context.GroupId, new CqMessage("云黑信息 <QQ号>"));
                 return;
             }
             
